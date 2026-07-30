@@ -1,0 +1,15 @@
+{% extends "core/base.html" %}
+{% block title %}Blood Bank | Pending Approval{% endblock %}
+{% block content %}
+  <section class="empty-state surface">
+    <p class="eyebrow">Account status</p>
+    <h1>Your hospital account is waiting for approval.</h1>
+    <p class="lead">
+      A system admin needs to verify your hospital profile before the dashboard becomes available.
+    </p>
+    <div class="hero-actions justify-center">
+      <a class="btn btn-primary" href="{% url 'core:landing' %}">Back to home</a>
+      <a class="btn btn-ghost surface-link" href="{% url 'core:logout' %}">Logout</a>
+    </div>
+  </section>
+{% endblock %}

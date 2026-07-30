@@ -1,0 +1,110 @@
+{% extends "core/base.html" %}
+{% block title %}Blood Bank | Donor Dashboard{% endblock %}
+{% block body_class %}theme-donor{% endblock %}
+{% block content %}
+  <section class="surface hero">
+    <p class="eyebrow">Donor portal</p>
+    <h1>Welcome, {{ request.user.first_name|default:request.user.email }}</h1>
+    <p class="lead">
+      Submit a donation appointment with the minimum details required, or raise a blood request from your account.
+    </p>
+  </section>
+
+  <section class="grid two-up mt-22">
+    <form class="surface auth-panel" method="post" id="donate-blood">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="donation">
+      <p class="eyebrow">Donate blood</p>
+      <h2 class="section-title">Request donation appointment</h2>
+      <div class="form-shell mt-22">
+        {{ donation_form.non_field_errors }}
+        <label class="field">
+          <span class="field-label">Hospital</span>
+          {{ donation_form.hospital }}
+          {{ donation_form.hospital.errors }}
+        </label>
+        <label class="field">
+          <span class="field-label">Appointment date and time</span>
+          {{ donation_form.appointment_datetime }}
+          {{ donation_form.appointment_datetime.errors }}
+        </label>
+        <label class="field">
+          <span class="field-label">Minimum requirement / health response</span>
+          {{ donation_form.survey_response }}
+          {{ donation_form.survey_response.errors }}
+        </label>
+        <label class="field">
+          <span class="field-label">Notes</span>
+          {{ donation_form.notes }}
+          {{ donation_form.notes.errors }}
+        </label>
+      </div>
+      <button class="btn btn-primary liquid full-width mt-22" type="submit">Submit donation request</button>
+    </form>
+
+    <form class="surface auth-panel" method="post" id="request-blood">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="blood_request">
+      <p class="eyebrow">Blood request</p>
+      <h2 class="section-title">Request blood</h2>
+      <div class="form-shell mt-22">
+        {{ blood_request_form.non_field_errors }}
+        <label class="field">
+          <span class="field-label">Hospital</span>
+          {{ blood_request_form.hospital }}
+          {{ blood_request_form.hospital.errors }}
+        </label>
+        <label class="field">
+          <span class="field-label">Blood group</span>
+          {{ blood_request_form.blood_group }}
+          {{ blood_request_form.blood_group.errors }}
+        </label>
+        <label class="field">
+          <span class="field-label">Units required</span>
+          {{ blood_request_form.units_required }}
+          {{ blood_request_form.units_required.errors }}
+        </label>
+        <label class="field">
+          <span class="field-label">Reason</span>
+          {{ blood_request_form.reason }}
+          {{ blood_request_form.reason.errors }}
+        </label>
+      </div>
+      <button class="btn btn-primary liquid full-width mt-22" type="submit">Submit blood request</button>
+    </form>
+  </section>
+
+  <section class="grid two-up mt-22">
+    <div class="surface">
+      <p class="eyebrow">Recent donation requests</p>
+      <h2 class="section-title">Your appointments</h2>
+      <div class="list-stack mt-22">
+        {% for appointment in appointments %}
+          <article class="stack-card">
+            <strong>{{ appointment.hospital.hospital_name }}</strong>
+            <span>{{ appointment.appointment_datetime }}</span>
+            <span>Status: {{ appointment.eligibility_status }}</span>
+          </article>
+        {% empty %}
+          <p class="support-text">No donation appointments submitted yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="surface">
+      <p class="eyebrow">Recent blood requests</p>
+      <h2 class="section-title">Your blood requests</h2>
+      <div class="list-stack mt-22">
+        {% for request in blood_requests %}
+          <article class="stack-card">
+            <strong>{{ request.hospital.hospital_name }} - {{ request.blood_group }}</strong>
+            <span>{{ request.units_required }} unit(s)</span>
+            <span>Status: {{ request.status }}</span>
+          </article>
+        {% empty %}
+          <p class="support-text">No blood requests submitted yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endblock %}

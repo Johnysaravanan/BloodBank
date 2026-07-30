@@ -1,0 +1,52 @@
+{% extends "core/base.html" %}
+{% block title %}Blood Bank | Admin Portal{% endblock %}
+{% block body_class %}theme-control-room{% endblock %}
+{% block content %}
+  <section class="split-layout">
+    <div class="surface-dark auth-intro">
+      <p class="eyebrow">Admin portal</p>
+      <h1>Manage approvals and monitor the system.</h1>
+      <p class="lead on-dark">
+        This front-end page sits alongside Django admin for a cleaner operations view.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary liquid" href="{% url 'admin:index' %}">Open Django admin</a>
+        <a class="btn btn-ghost" href="{% url 'core:landing' %}">Back to home</a>
+      </div>
+    </div>
+
+    <div class="card-grid card-grid-3">
+      <article class="panel">
+        <p class="eyebrow">Hospitals</p>
+        <h2 class="section-title">{{ hospital_count }}</h2>
+        <p class="support-text">Registered in the system</p>
+      </article>
+      <article class="panel">
+        <p class="eyebrow">Pending</p>
+        <h2 class="section-title">{{ pending_hospital_count }}</h2>
+        <p class="support-text">Hospital approvals waiting</p>
+      </article>
+      <article class="panel">
+        <p class="eyebrow">Requests</p>
+        <h2 class="section-title">{{ request_count }}</h2>
+        <p class="support-text">Emergency records</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="panel mt-22">
+    <div class="panel-head">
+      <div>
+        <p class="eyebrow">Admin actions</p>
+        <h2 class="section-title">Quick links</h2>
+      </div>
+      <span class="badge">Role access</span>
+    </div>
+    <div class="card-grid card-grid-4">
+      <a class="quick-link" href="{% url 'admin:core_user_changelist' %}"><span>Manage users</span><span>-></span></a>
+      <a class="quick-link" href="{% url 'admin:core_hospitalprofile_changelist' %}"><span>Approve hospital profiles</span><span>-></span></a>
+      <a class="quick-link" href="{% url 'admin:core_bloodinventory_changelist' %}"><span>Update inventory</span><span>-></span></a>
+      <a class="quick-link" href="{% url 'admin:core_emergencyrequest_changelist' %}"><span>Review requests</span><span>-></span></a>
+    </div>
+  </section>
+{% endblock %}

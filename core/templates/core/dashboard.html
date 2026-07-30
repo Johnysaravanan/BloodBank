@@ -1,0 +1,16 @@
+{% extends "core/base.html" %}
+{% block title %}Blood Bank | Live Dashboard{% endblock %}
+{% block body_class %}theme-clinical{% endblock %}
+{% block content %}
+  <section class="empty-state surface">
+    <p class="eyebrow">Live dashboard shell</p>
+    <h1>Hospital dashboard data endpoint</h1>
+    <p class="lead">
+      This page can be used as a simple entry point for a chart-driven dashboard or embedded inventory summary.
+    </p>
+    <div class="hero-actions justify-center">
+      <a class="btn btn-primary" href="{% url 'core:hospital-dashboard-page' %}">Open hospital dashboard</a>
+      <a class="btn btn-ghost surface-link" href="{% url 'core:landing' %}">Back to home</a>
+    </div>
+  </section>
+{% endblock %}

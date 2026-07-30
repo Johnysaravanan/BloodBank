@@ -1,0 +1,101 @@
+{% extends "core/base.html" %}
+{% block title %}Blood Bank | Summary{% endblock %}
+{% block body_class %}theme-clinical{% endblock %}
+{% block content %}
+  <section class="dashboard-layout">
+    <div class="dashboard-top">
+      <p class="eyebrow">Blood bank summary</p>
+      <h1>System-wide blood stock at a glance.</h1>
+      <p class="lead">
+        A consolidated view of all hospitals and their combined stock levels across every blood group.
+      </p>
+    </div>
+    <a class="btn btn-ghost surface-link" href="{% url 'admin:index' %}">
+      Open Django admin
+    </a>
+  </section>
+
+  <section class="card-grid card-grid-3 mt-22">
+    <article class="panel">
+      <p class="eyebrow">Hospitals</p>
+      <h2 class="section-title">{{ hospital_count }}</h2>
+      <p class="support-text">Active hospital profiles in the system</p>
+    </article>
+    <article class="panel">
+      <p class="eyebrow">Inventory rows</p>
+      <h2 class="section-title">{{ inventory_count }}</h2>
+      <p class="support-text">Blood group stock records</p>
+    </article>
+    <article class="panel">
+      <p class="eyebrow">Total units</p>
+      <h2 class="section-title">{{ total_units }}</h2>
+      <p class="support-text">Combined stock across all hospitals</p>
+    </article>
+  </section>
+
+  <section class="split-layout mt-22">
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Inventory mix</p>
+          <h2 class="section-title">Blood group distribution</h2>
+        </div>
+        <span class="badge">Pie chart</span>
+      </div>
+
+      <div class="chart-shell">
+        <div class="chart-pie" style="background: conic-gradient({{ chart_slices }});"></div>
+        <div class="chart-center">
+          <span class="chart-value">{{ total_units }}</span>
+          <span class="chart-label">units total</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="panel panel-dark">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Legend</p>
+        <h2 class="section-title">Blood group breakdown</h2>
+        </div>
+        <span class="badge badge-dark">Live</span>
+      </div>
+
+      <div class="stack-list">
+        {% for item in legend_items %}
+          <div class="pill">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="display: inline-block; width: 14px; height: 14px; border-radius: 999px; background: {{ item.color }};"></span>
+              <strong>{{ item.blood_group }}</strong>
+            </div>
+            <span>{{ item.total_units }} units | {{ item.percent }}%</span>
+          </div>
+        {% empty %}
+          <p class="support-text">No inventory data available.</p>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+
+  <section class="panel mt-22">
+    <div class="panel-head">
+      <div>
+        <p class="eyebrow">Hospitals</p>
+        <h2 class="section-title">Top stock holders</h2>
+      </div>
+      <span class="badge">By total units</span>
+    </div>
+
+    <div class="card-grid card-grid-3">
+      {% for hospital in hospital_cards %}
+        <article class="metric-card">
+          <p class="metric-label">{{ hospital.hospital_name }}</p>
+          <p class="metric-value">{{ hospital.total_units|default:0 }}</p>
+          <p class="metric-label">total units</p>
+        </article>
+      {% empty %}
+        <p class="support-text">No hospitals found.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

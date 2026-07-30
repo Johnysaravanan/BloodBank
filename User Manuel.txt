@@ -1,0 +1,21 @@
+python manage.py runserver
+
+# Go to the project folder
+cd C:\Users\E-KENDRA\Desktop\Johny\BloodBank
+
+# Create a virtual environment (only once)
+python -m venv .venv
+
+# Activate it
+
+# Windows (Command Prompt)
+.venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the project
+python main.py runserver
+
+Django version 5.2.16, using settings 'bloodbank_project.settings'
+Starting development server at http://127.0.0.1:8000/

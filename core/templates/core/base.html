@@ -1,0 +1,57 @@
+{% load static %}
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Blood Bank{% endblock %}</title>
+    <meta name="theme-color" content="#eef2f7">
+    <link rel="stylesheet" href="{% static 'core/ui.css' %}">
+  </head>
+  <body class="site-body {% block body_class %}{% endblock %}">
+    <div class="site-bg">
+      <div class="site-shell">
+        <header class="site-header">
+          <a class="brand" href="{% url 'core:landing' %}">
+            <span class="brand-badge">BB</span>
+            <span class="brand-copy">
+              <span class="brand-kicker">Blood Bank</span>
+              <span class="brand-title">Hospital and donor portal</span>
+            </span>
+          </a>
+
+          <nav class="site-nav" aria-label="Primary">
+            <a class="nav-link" href="{% url 'core:landing' %}">Home</a>
+            {% if user.is_authenticated %}
+              {% if user.role == "donor" %}
+                <a class="nav-link" href="{% url 'core:donor-dashboard' %}#donate-blood">Donate Blood</a>
+                <a class="nav-link" href="{% url 'core:donor-dashboard' %}#request-blood">Request Blood</a>
+                <a class="nav-link" href="{% url 'core:donor-dashboard' %}">Donor Dashboard</a>
+              {% elif user.role == "hospital" %}
+                <a class="nav-link" href="{% url 'core:hospital-dashboard-page' %}">Hospital Dashboard</a>
+              {% elif user.role == "admin" or user.is_superuser %}
+                <a class="nav-link" href="{% url 'core:admin-portal' %}">Admin Portal</a>
+              {% endif %}
+              <a class="btn btn-ghost" href="{% url 'core:logout' %}">Logout</a>
+            {% else %}
+              <a class="nav-link" href="{% url 'core:login' %}">Login</a>
+              <a class="btn btn-primary" href="{% url 'core:register' %}">Register</a>
+            {% endif %}
+          </nav>
+        </header>
+
+        {% if messages %}
+          <div class="message-stack">
+            {% for message in messages %}
+              <div class="message">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <main class="site-main">
+          {% block content %}{% endblock %}
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

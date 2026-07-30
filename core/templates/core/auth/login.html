@@ -1,0 +1,40 @@
+{% extends "core/base.html" %}
+{% block title %}Blood Bank | Login{% endblock %}
+{% block body_class %}theme-donor{% endblock %}
+{% block content %}
+  <section class="split-layout">
+    <div class="surface-dark auth-intro">
+      <p class="eyebrow">Welcome back</p>
+      <h1>Sign in to continue.</h1>
+      <p class="lead on-dark">
+        Enter your email and password and we'll route you to the right dashboard automatically.
+      </p>
+      <div class="notice">
+        Donors, hospitals, and admins all use the same secure login flow.
+      </div>
+    </div>
+
+    <form class="surface auth-panel" method="post">
+      {% csrf_token %}
+      <p class="eyebrow">Login</p>
+      <h2 class="section-title">Access your account</h2>
+      <div class="form-shell mt-22">
+        {{ form.non_field_errors }}
+        <label class="field">
+          <span class="field-label">Email address</span>
+          {{ form.username }}
+          {{ form.username.errors }}
+        </label>
+        <label class="field">
+          <span class="field-label">Password</span>
+          {{ form.password }}
+          {{ form.password.errors }}
+        </label>
+      </div>
+      <button class="btn btn-primary liquid full-width mt-22" type="submit">Sign in</button>
+      <p class="small-note mt-18">
+        New here? <a class="text-accent" href="{% url 'core:register' %}">Create an account</a>
+      </p>
+    </form>
+  </section>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "core/base.html" %}
+{% block title %}Blood Bank | Register{% endblock %}
+{% block body_class %}theme-donor{% endblock %}
+{% block content %}
+  <section class="split-layout">
+    <div class="surface auth-intro">
+      <p class="eyebrow">Start here</p>
+      <h1>Create your account.</h1>
+      <p class="lead">
+        Register as a donor or hospital user. Hospital accounts are created with a profile and approved in admin.
+      </p>
+      <div class="card-grid mt-22">
+        <div class="metric-card">
+          <p class="metric-label">Donor accounts</p>
+          <p class="support-text">Activate immediately after registration.</p>
+        </div>
+        <div class="metric-card">
+          <p class="metric-label">Hospital accounts</p>
+          <p class="support-text">Wait for approval before dashboard access.</p>
+        </div>
+      </div>
+    </div>
+
+    <form class="surface auth-panel" method="post">
+      {% csrf_token %}
+      <p class="eyebrow">Registration</p>
+      <h2 class="section-title">Create profile</h2>
+      {{ form.non_field_errors }}
+
+      <div class="field-grid mt-22">
+        <label class="field">
+          <span class="field-label">First name</span>
+          {{ form.first_name }}
+          {{ form.first_name.errors }}
+        </label>
+        <label class="field">
+          <span class="field-label">Last name</span>
+          {{ form.last_name }}
+          {{ form.last_name.errors }}
+        </label>
+        <label class="field" style="grid-column: 1 / -1;">
+          <span class="field-label">Email address</span>
+          {{ form.email }}
+          {{ form.email.errors }}
+        </label>
+        <label class="field">
+          <span class="field-label">Phone number</span>
+          {{ form.phone_number }}
+          {{ form.phone_number.errors }}
+        </label>
+        <label class="field">
+          <span class="field-label">Role</span>
+          {{ form.role }}
+          {{ form.role.errors }}
+        </label>
+        <label class="field" style="grid-column: 1 / -1;">
+          <span class="field-label">Hospital name</span>
+          {{ form.hospital_name }}
+          {{ form.hospital_name.errors }}
+        </label>
+        <label class="field" style="grid-column: 1 / -1;">
+          <span class="field-label">Registration number</span>
+          {{ form.registration_number }}
+          {{ form.registration_number.errors }}
+        </label>
+        <label class="field">
+          <span class="field-label">Password</span>
+          {{ form.password1 }}
+          {{ form.password1.errors }}
+        </label>
+        <label class="field">
+          <span class="field-label">Confirm password</span>
+          {{ form.password2 }}
+          {{ form.password2.errors }}
+        </label>
+      </div>
+
+      <button class="btn btn-primary full-width mt-22" type="submit">Create account</button>
+      <p class="small-note mt-18">
+        Already registered? <a class="text-accent" href="{% url 'core:login' %}">Sign in</a>
+      </p>
+    </form>
+  </section>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "core/base.html" %}
+{% block title %}Blood Bank | Home{% endblock %}
+{% block body_class %}theme-donor{% endblock %}
+{% block content %}
+  <section class="hero-layout">
+    <div class="surface hero-copy">
+      <p class="eyebrow">Blood donation network</p>
+      <h1>A cleaner way to manage donors, hospitals, and emergency requests.</h1>
+      <p class="lead">
+        Register, sign in, manage inventory, approve hospital accounts, and handle urgent requests from one modern portal.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="{% url 'core:register' %}">Create account</a>
+        <a class="btn btn-ghost" href="{% url 'core:login' %}">Sign in</a>
+        <a class="btn btn-ghost" href="{% url 'admin:index' %}">Django admin</a>
+      </div>
+
+      <div class="stats-grid">
+        <div class="metric-card">
+          <p class="metric-value">{{ hospital_count }}</p>
+          <p class="metric-label">Hospitals linked</p>
+        </div>
+        <div class="metric-card">
+          <p class="metric-value">{{ inventory_count }}</p>
+          <p class="metric-label">Inventory records</p>
+        </div>
+        <div class="metric-card">
+          <p class="metric-value">{{ request_count }}</p>
+          <p class="metric-label">Emergency requests</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="surface-dark hero-side">
+      <p class="eyebrow">Quick access</p>
+      <h2 class="section-title">Primary portals</h2>
+      <div class="link-grid">
+        <a href="{% url 'core:blood-bank-dashboard' %}"><span>Blood bank dashboard</span><span>-></span></a>
+        <a href="{% url 'core:hospital-dashboard-page' %}"><span>Hospital dashboard</span><span>-></span></a>
+        <a href="{% url 'core:admin-portal' %}"><span>Admin portal</span><span>-></span></a>
+        <a href="{% url 'core:pending-approval' %}"><span>Pending approvals</span><span>-></span></a>
+      </div>
+      <div class="notice">
+        Hospital accounts are approved in Django admin before they can manage live inventory.
+      </div>
+    </aside>
+  </section>
+
+{% endblock %}

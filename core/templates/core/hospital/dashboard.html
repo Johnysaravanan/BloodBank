@@ -1,0 +1,95 @@
+{% extends "core/base.html" %}
+{% block title %}Blood Bank | Hospital Dashboard{% endblock %}
+{% block body_class %}theme-clinical{% endblock %}
+{% block content %}
+  <section class="dashboard-layout">
+    <div class="dashboard-top">
+      <p class="eyebrow">Hospital workspace</p>
+      <h1>{{ hospital_profile.hospital_name|default:"Hospital dashboard" }}</h1>
+      <p class="lead">
+        Monitor inventory, review requests, and keep appointments moving from a single clean view.
+      </p>
+    </div>
+    <a class="btn btn-ghost surface-link" href="{% url 'admin:index' %}">
+      Open Django admin
+    </a>
+  </section>
+
+  {% if hospital_profile %}
+    <section class="dashboard-cards mt-22">
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Inventory</p>
+            <h2 class="section-title">Live blood stock</h2>
+          </div>
+          <span class="badge">Updated live</span>
+        </div>
+
+        <div class="card-grid card-grid-4">
+          {% for item in inventory %}
+            <div class="metric-card">
+              <p class="metric-label">{{ item.blood_group }}</p>
+              <p class="metric-value">{{ item.units_available }}</p>
+              <p class="metric-label">units available</p>
+            </div>
+          {% empty %}
+            <p class="support-text">No inventory records yet.</p>
+          {% endfor %}
+        </div>
+      </article>
+
+      <div class="card-grid card-grid-2">
+        <article class="panel panel-dark">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Requests</p>
+              <h2 class="section-title">Recent emergency requests</h2>
+            </div>
+            <span class="badge badge-dark">Queue</span>
+          </div>
+          <div class="stack-list">
+            {% for request in requests %}
+              <div class="pill">
+                <strong>{{ request.blood_group }} - {{ request.units_required }} units</strong>
+                <span>{{ request.status }}</span>
+                {% if request.reason %}
+                  <span class="stack-note">{{ request.reason }}</span>
+                {% endif %}
+              </div>
+            {% empty %}
+              <p class="support-text">No emergency requests yet.</p>
+            {% endfor %}
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Appointments</p>
+              <h2 class="section-title">Recent bookings</h2>
+            </div>
+            <span class="badge">Latest 10</span>
+          </div>
+          <div class="stack-list">
+            {% for appointment in appointments %}
+              <div class="pill">
+                <strong>{{ appointment.donor.first_name }} {{ appointment.donor.last_name }}</strong>
+                <span>{{ appointment.appointment_datetime }}</span>
+                <span class="stack-note">Eligibility: {{ appointment.eligibility_status }}</span>
+              </div>
+            {% empty %}
+              <p class="support-text">No appointments yet.</p>
+            {% endfor %}
+          </div>
+        </article>
+      </div>
+    </section>
+  {% else %}
+    <section class="empty-state surface mt-22">
+      <p class="eyebrow">Missing profile</p>
+      <h1>No hospital profile found.</h1>
+      <p class="lead">Create one from registration or Django admin so this dashboard can load live data.</p>
+    </section>
+  {% endif %}
+{% endblock %}
