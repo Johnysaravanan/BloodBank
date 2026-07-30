@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+from urllib.parse import urlparse
 
 from dotenv import load_dotenv
 
@@ -8,11 +9,33 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-change-me")
-DEBUG = os.getenv("DEBUG", "True").lower() == "true"
-ALLOWED_HOSTS = [host.strip() for host in os.getenv("ALLOWED_HOSTS", "*").split(",")]
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+
+raw_allowed_hosts = os.getenv("ALLOWED_HOSTS", ".vercel.app,localhost,127.0.0.1")
+ALLOWED_HOSTS = [host.strip() for host in raw_allowed_hosts.split(",") if host.strip()]
+
+raw_csrf_origins = os.getenv("CSRF_TRUSTED_ORIGINS", "")
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in raw_csrf_origins.split(",") if origin.strip()]
 
 
 def build_database_config():
+    database_url = os.getenv("DATABASE_URL")
+    if database_url:
+        parsed = urlparse(database_url)
+        return {
+            "default": {
+                "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.mysql"),
+                "NAME": parsed.path.lstrip("/"),
+                "USER": parsed.username or os.getenv("DB_USER", "root"),
+                "PASSWORD": parsed.password or os.getenv("DB_PASSWORD", ""),
+                "HOST": parsed.hostname or os.getenv("DB_HOST", "127.0.0.1"),
+                "PORT": str(parsed.port or os.getenv("DB_PORT", "3306")),
+                "OPTIONS": {
+                    "charset": "utf8mb4",
+                },
+            }
+        }
+
     engine = os.getenv("DB_ENGINE", "django.db.backends.sqlite3")
     if engine == "django.db.backends.sqlite3":
         return {
